@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: stg_algae_CA_2025
+    description: >
+      Staged algae transect data from Reef Check California (data request February 2026).
+      One row per organism observation per transect. All species retained for future
+      expansion. Columns renamed, types cast, and presence/subsampling flags added.
+      Pre-2018 data is zero-populated; post-2018 is not. See project README for
+      full data provenance notes.
+    columns:
+      - name: site_name
+        description: Name of the survey site as recorded by Reef Check.
+        tests:
+          - not_null
+
+      - name: latitude
+        description: Latitude coordinate of the survey site in decimal degrees.
+        tests:
+          - not_null
+
+      - name: longitude
+        description: Longitude coordinate of the survey site in decimal degrees.
+        tests:
+          - not_null
+
+      - name: survey_year
+        description: Year the survey was conducted.
+        tests:
+          - not_null
+
+      - name: survey_date
+        description: Full date the survey was conducted, cast from STRING to DATE.
+        tests:
+          - not_null
+
+      - name: depth_ft
+        description: Depth of the transect in feet.
+
+      - name: transect_number
+        description: Transect number within the site. Sites have up to 6 algae transects.
+        tests:
+          - not_null
+
+      - name: species_common_name
+        description: Common name of the algae species as recorded by Reef Check.
+        tests:
+          - not_null
+
+      - name: amount
+        description: >
+          Count of organisms. For Giant Kelp always 1 (one row per holdfast).
+          Value of 0 indicates a zero-population placeholder used in pre-2018 data.
+        tests:
+          - not_null
+
+      - name: stipe_count
+        description: >
+          Number of stipes counted on this holdfast. Recorded for Giant Kelp and
+          Feather Boa Kelp only. NULL for all other species.
+
+      - name: distance_surveyed_m
+        description: >
+          Distance along the transect surveyed in meters. 30 indicates no subsampling.
+          Minimum valid value is 5 per Reef Check protocol. 10 rows contain NULL
+          distance values — all are zero-population placeholder rows (amount = 0)
+          from 2006-2010 surveys at Cathedral Cove, Mendocino Headlands, and Paradise
+          Point. These rows are excluded from all Giant Kelp aggregations by the
+          is_presence_record filter and do not affect pipeline output.
+        tests:
+          - not_null:
+              config:
+                severity: warn
+
+      - name: is_presence_record
+        description: >
+          True when Amount = 1, indicating a genuine organism observation.
+          False for zero-population placeholder rows (pre-2018 convention).
+        tests:
+          - not_null
+
+      - name: is_subsampled
+        description: True when distance_surveyed_m is less than 30.
+        tests:
+          - not_null

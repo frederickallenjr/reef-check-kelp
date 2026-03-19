@@ -63,3 +63,40 @@ dbt run        # run all models
 dbt test       # run all tests
 dbt docs generate && dbt docs serve  # view lineage graph
 ```
+## Future Enhancements
+
+### Automated pipeline updates
+Currently the pipeline requires a manual `dbt run` after new data is loaded.
+Full automation is planned using Google Cloud Storage as a landing zone for
+new CSV uploads, with a Cloud Run job triggering `dbt run` automatically when
+new data arrives. This would allow collaborators to upload new survey data
+directly to a GCS bucket and have the mart update without any manual
+intervention.
+
+### Multi-species expansion
+The staging model retains all species observed in RCCA surveys. Adding new
+species to the pipeline requires only a new intermediate model and mart —
+the staging layer and site reference table require no changes. Planned
+additions include fish transect data and additional algae species.
+
+### Fish transect pipeline
+A parallel pipeline for RCCA fish transect data (~1.5M rows) is planned
+using the same BigQuery + dbt architecture. The `int_survey_sites` model
+will serve as a shared site reference across both pipelines.
+
+### Spatial analytics project
+A secondary project is planned using PostgreSQL + PostGIS + QGIS to perform
+spatial analysis of Giant Kelp distribution in relation to Marine Protected
+Areas, shipping lanes, offshore infrastructure, and other environmental
+factors. The `mart_giant_kelp_CA_site_year` table will serve as the
+biological data layer in that project.
+
+### Regional expansion
+Current data covers California survey sites only. Reef Check operates
+monitoring programs in Oregon and Washington with comparable transect
+methodology. Expanding the pipeline to include Pacific Northwest data
+would require only new source tables and staging models — the
+intermediate and mart layer logic is transferable with minimal
+modification. A unified Pacific Coast view would enable longitudinal
+analysis of algae distributions across a fuller extent of their
+North American range.

@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: int_giant_kelp_CA_2025
+    description: >
+      Giant Kelp observations aggregated to the transect level. Filters to
+      presence records only (is_presence_record = true). Calculates stipe
+      counts, plant counts, and density metrics per transect per survey date.
+      Subsampled transects are flagged but included — density metrics normalize
+      for distance surveyed.
+    columns:
+      - name: site_name
+        description: Name of the survey site.
+        tests:
+          - not_null
+
+      - name: survey_year
+        description: Year the survey was conducted.
+        tests:
+          - not_null
+
+      - name: survey_date
+        description: Full date the survey was conducted.
+        tests:
+          - not_null
+
+      - name: transect_number
+        description: Transect number within the site.
+        tests:
+          - not_null
+
+      - name: plant_count
+        description: Number of Giant Kelp holdfasts counted on this transect.
+        tests:
+          - not_null
+
+      - name: total_stipes
+        description: Sum of all stipes counted across all holdfasts on this transect.
+        tests:
+          - not_null
+
+      - name: distance_surveyed_m
+        description: Distance surveyed in meters. 30 = full transect, less than 30 = subsampled.
+        tests:
+          - not_null
+
+      - name: is_subsampled
+        description: True when distance_surveyed_m is less than 30.
+        tests:
+          - not_null
+
+      - name: stipes_per_meter
+        description: Total stipes divided by distance surveyed. Comparable across all transects.
+
+      - name: stipes_per_30m_extrapolated
+        description: Stipes per meter multiplied by 30. Full-transect equivalent for display.
+
+  - name: int_survey_sites
+    description: >
+      Distinct site reference table derived from all observations in
+      stg_algae_CA_2025. Coordinates are averaged across all surveys to
+      smooth minor GPS drift. Reusable across all future species models.
+    columns:
+      - name: site_name
+        description: Name of the survey site. Primary key.
+        tests:
+          - not_null
+          - unique
+
+      - name: latitude
+        description: Average latitude across all surveys at this site.
+        tests:
+          - not_null
+
+      - name: longitude
+        description: Average longitude across all surveys at this site.
+        tests:
+          - not_null
+
+      - name: first_survey_year
+        description: Earliest year this site appears in the dataset.
+        tests:
+          - not_null
+
+      - name: last_survey_year
+        description: Most recent year this site appears in the dataset.
+        tests:
+          - not_null
+
+      - name: years_surveyed
+        description: Count of distinct years this site was surveyed.
+        tests:
+          - not_null

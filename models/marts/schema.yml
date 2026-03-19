@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: mart_giant_kelp_CA_site_year
+    description: >
+      Final aggregated Giant Kelp metrics by site and year. One row per
+      site per survey year. Primary data source for Tableau dashboard.
+      Coordinates sourced from int_survey_sites using averaged GPS positions.
+      Both raw stipe totals and density-normalized metrics are included to
+      support flexible visualization and honest representation of subsampled
+      transects.
+    columns:
+      - name: site_name
+        description: Name of the survey site.
+        tests:
+          - not_null
+
+      - name: latitude
+        description: Average latitude of the survey site in decimal degrees.
+        tests:
+          - not_null
+
+      - name: longitude
+        description: Average longitude of the survey site in decimal degrees.
+        tests:
+          - not_null
+
+      - name: survey_year
+        description: Year of the survey.
+        tests:
+          - not_null
+
+      - name: transects_surveyed
+        description: Number of transects conducted at this site in this year.
+        tests:
+          - not_null
+
+      - name: transects_subsampled
+        description: Number of transects that were subsampled (distance less than 30m).
+
+      - name: total_stipes_site
+        description: >
+          Raw sum of all stipes counted across all transects at this site
+          in this year. Not normalized for subsampling.
+
+      - name: avg_stipes_per_meter
+        description: >
+          Average stipes per meter across all transects. Comparable across
+          sites and years regardless of subsampling.
+
+      - name: total_stipes_extrapolated
+        description: >
+          Sum of per-transect extrapolated stipe counts (stipes per meter
+          multiplied by 30). Full-transect equivalent site total.
+
+      - name: total_plants_site
+        description: Total Giant Kelp holdfasts counted across all transects at this site.
+
+      - name: avg_plants_per_transect
+        description: Average holdfast count per transect at this site in this year.
+
+      - name: any_transects_subsampled
+        description: True if any transect at this site in this year was subsampled.
+
+      - name: earliest_survey_date
+        description: Date of the first survey conducted at this site in this year.
+
+      - name: latest_survey_date
+        description: Date of the last survey conducted at this site in this year.

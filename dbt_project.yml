@@ -16,11 +16,8 @@ clean-targets:
 models:
   reef_check_kelp:
     staging:
-      +schema: dbt_dev
       +materialized: view
     intermediate:
-      +schema: dbt_dev
       +materialized: view
     marts:
-      +schema: dbt_dev
       +materialized: table

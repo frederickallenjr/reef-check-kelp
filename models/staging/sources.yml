@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: raw
+    database: reef-check-kelp-2025
+    schema: raw
+    tables:
+      - name: algae_CA_2025
+        description: >
+          Direct CSV export from Reef Check California received February 2026.
+          Data spans 2006-2025. Pre-2018 data is zero-populated — absent
+          species appear as rows with Amount = 0. Post-2018 data is not
+          zero-populated. NA values in source file are stored as NULL.
+          See project README for full data provenance and source notes.

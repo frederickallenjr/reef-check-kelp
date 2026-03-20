@@ -4,11 +4,12 @@ models:
   - name: mart_giant_kelp_CA_site_year
     description: >
       Final aggregated Giant Kelp metrics by site and year. One row per
-      site per survey year. Primary data source for Tableau dashboard.
-      Coordinates sourced from int_survey_sites using averaged GPS positions.
-      Both raw stipe totals and density-normalized metrics are included to
-      support flexible visualization and honest representation of subsampled
-      transects.
+      site per survey year. Includes both presence records (2006-2025)
+      and absence records (2018-2025 only). Absence records represent
+      sites where surveys were conducted but no Giant Kelp was observed.
+      Pre-2018 absences are excluded due to the zero-population recording
+      convention used in that era. The is_absence_record flag distinguishes
+      the two record types. Primary data source for Tableau dashboard.
     columns:
       - name: site_name
         description: Name of the survey site.
@@ -67,3 +68,12 @@ models:
 
       - name: latest_survey_date
         description: Date of the last survey conducted at this site in this year.
+     
+      - name: is_absence_record
+        description: >
+          True for site-year combinations where surveys were conducted but
+          no Giant Kelp was observed. False for presence records. Use this
+          field in Tableau to style zero-kelp sites distinctly from
+          unsurveyed sites.
+        tests:
+          - not_null

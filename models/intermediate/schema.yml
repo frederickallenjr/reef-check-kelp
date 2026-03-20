@@ -91,3 +91,34 @@ models:
         description: Count of distinct years this site was surveyed.
         tests:
           - not_null
+          
+  - name: int_giant_kelp_absences_CA
+    description: >
+      Transect-level absence records for Giant Kelp post-2018. Identifies
+      site+transect+date combinations where a survey was conducted but no
+      Giant Kelp presence records exist in int_giant_kelp_CA_2025. Limited
+      to post-2018 data where the absence of a row genuinely indicates no
+      kelp observed, rather than the pre-2018 zero-population convention.
+      Used to represent surveyed-but-absent sites in the mart and Tableau
+      dashboard.
+    columns:
+      - name: site_name
+        description: Name of the survey site.
+        tests:
+          - not_null
+      - name: survey_year
+        description: Year the survey was conducted.
+        tests:
+          - not_null
+      - name: survey_date
+        description: Date the survey was conducted.
+        tests:
+          - not_null
+      - name: transect_number
+        description: Transect number within the site.
+        tests:
+          - not_null
+      - name: is_absence_record
+        description: Always true for records in this model.
+        tests:
+          - not_null

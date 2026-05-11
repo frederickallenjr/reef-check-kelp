@@ -30,19 +30,36 @@ raw.algae_CA_2025
 ## Models
 
 **Staging** — `stg_algae_CA_2025`
-Renames columns, casts types, adds `is_presence_record` and `is_subsampled`
-flags. All species retained for future expansion.
+Renames columns, casts types, and adds `is_presence_record` and `is_subsampled`
+flags. All species retained for future expansion. One row per organism observation
+per transect.
 
 **Intermediate** — `int_giant_kelp_CA_2025`
-Filters to Giant Kelp presence records only. Aggregates stipe counts and
-calculates density metrics per transect per survey date.
+Filters to Giant Kelp presence records only (`is_presence_record = true`).
+Aggregates stipe counts and calculates density metrics per transect per survey date,
+including raw stipe totals, stipes per meter, and extrapolated full-transect equivalents.
+
+**Intermediate** — `int_giant_kelp_absences_CA`
+Identifies post-2018 site+transect+date combinations where a survey was conducted
+but no Giant Kelp presence records exist in `int_giant_kelp_CA_2025`. Created to
+solve a visualization problem: without explicit absence records, surveyed-but-absent
+sites are indistinguishable from unsurveyed sites in Tableau. Logic performs a left
+join from all surveyed transects (`stg_algae_CA_2025`) against confirmed Giant Kelp
+transects (`int_giant_kelp_CA_2025`), returning only the unmatched rows as zero-stipe
+records. Limited to 2018–2025 because pre-2018 zero-population rows cannot reliably
+distinguish true absence from recording convention artifacts.
 
 **Intermediate** — `int_survey_sites`
-Distinct site reference table with averaged coordinates and survey history.
-Reusable across future species models.
+Distinct site reference table with averaged coordinates and survey history. Coordinates
+are averaged across all surveys to smooth minor GPS drift. Reusable across all future
+species models without modification.
 
 **Mart** — `mart_giant_kelp_CA_site_year`
-Final aggregated table by site and year. Primary Tableau data source.
+Unions presence records from `int_giant_kelp_CA_2025` and absence records from
+`int_giant_kelp_absences_CA`, then joins to `int_survey_sites` for enriched coordinates.
+Produces one row per site per survey year. The `is_absence_record` boolean flag
+distinguishes surveyed-but-absent sites (true, 2018–2025 only) from sites with confirmed
+Giant Kelp presence (false, 2006–2025). Primary data source for Tableau dashboard.
 
 ## Data Provenance
 Raw data received as CSV via Reef Check California data request.

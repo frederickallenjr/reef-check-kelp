@@ -116,3 +116,25 @@ intermediate and mart layer logic is transferable with minimal
 modification. A unified Pacific Coast view would enable longitudinal
 analysis of algae distributions across a fuller extent of their
 North American range.
+
+## Retired Components
+
+### int_giant_kelp_absences_CA
+
+Built to support a Tableau visualization distinguishing surveyed-but-absent
+sites from unsurveyed sites. Logic performs a left join from all surveyed
+transects against confirmed Giant Kelp presence records, returning unmatched
+rows as explicit zero-stipe records (2018–2025 only; pre-2018 excluded due
+to zero-population recording convention artifacts).
+
+The visualization was retired after the absence layer revealed inconsistent
+survey frequency across sites — gaps that appeared to show population
+disappearance were more likely the result of irregular survey coverage than
+true absence. The model logic is sound; the underlying data lacks the
+temporal consistency required to make absence records analytically meaningful
+at the site+year level.
+
+Model and corresponding BigQuery table are preserved for methodology reference.
+The mart_giant_kelp_CA_site_year union logic and is_absence_record flag remain
+in place but the absence-driven outputs are not currently used in any
+visualization.

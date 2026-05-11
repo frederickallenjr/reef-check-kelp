@@ -87,13 +87,6 @@ A parallel pipeline for RCCA fish transect data (~1.5M rows) is planned
 using the same BigQuery + dbt architecture. The `int_survey_sites` model
 will serve as a shared site reference across both pipelines.
 
-### Spatial analytics project
-A secondary project is planned using PostgreSQL + PostGIS + QGIS to perform
-spatial analysis of Giant Kelp distribution in relation to Marine Protected
-Areas, shipping lanes, offshore infrastructure, and other environmental
-factors. The `mart_giant_kelp_CA_site_year` table will serve as the
-biological data layer in that project.
-
 ### Regional expansion
 Current data covers California survey sites only. Reef Check operates
 monitoring programs in Oregon and Washington with comparable transect

@@ -15,10 +15,13 @@ Raw data and mart tables reside in BigQuery; this repository contains the dbt tr
 
 
 ## Pipeline Structure
+
 ```
 raw.algae_CA_2025
     └── stg_algae_CA_2025 (view)
             ├── int_giant_kelp_CA_2025 (view)
+            │       └── mart_giant_kelp_CA_site_year (table)
+            ├── int_giant_kelp_absences_CA (view)
             │       └── mart_giant_kelp_CA_site_year (table)
             └── int_survey_sites (view)
                     └── mart_giant_kelp_CA_site_year (table)

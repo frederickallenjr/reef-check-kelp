@@ -213,18 +213,13 @@ new data arrives. This would allow collaborators to upload new survey data
 directly to a GCS bucket and have the mart update without any manual
 intervention.
 
-### Multi-species expansion
-The staging model retains all species observed in RCCA surveys. Adding new
-species to the pipeline requires only a new intermediate model and mart —
-the staging layer and site reference table require no changes.
-
-### Fish transect pipeline
-A parallel pipeline for RCCA fish transect data (~1.5M rows) is planned
-using the same BigQuery + dbt architecture. The `int_survey_sites` model
-will serve as a shared site reference across both pipelines.
+### Fish and invertebrate pipelines
+Parallel pipelines for Reef Check fish transect data and Reef Check invertebrate transect data are planned
+using the same BigQuery + dbt architecture. The `int_survey_sites_west_coast` model
+will serve as a shared site reference across all pipelines.
 
 ### Regional expansion
-Current data covers exististing sites in California, Oregon, and Washington. 
+Current data covers existing sites in California, Oregon, and Washington. 
 Expanding the pipeline to include future sites would require only new 
 source tables and staging models — the intermediate and mart layer logic is 
 transferable with minimal modification.

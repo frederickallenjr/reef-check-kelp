@@ -12,3 +12,15 @@ sources:
           species appear as rows with Amount = 0. Post-2018 data is not
           zero-populated. NA values in source file are stored as NULL.
           See project README for full data provenance and source notes.
+
+      - name: algae_OR_2025
+        description: >
+          Direct CSV export from Reef Check Oregon received February 2026.
+          Data spans 2017-2025. See project README for full data provenance
+          and source notes.
+
+      - name: algae_WA_2025
+        description: >
+          Direct CSV export from Reef Check Washington received February 2026.
+          Data spans 2021-2025. See project README for full data provenance
+          and source notes.

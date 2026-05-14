@@ -52,7 +52,10 @@ Unions CA, OR, and WA raw algae tables. Filters to 2025 survey year. Adds `state
 Derives `species` from `classcode`, collapsing Southern Sea Palm size bins
 (`<30cm` and `>30cm`) into a single species entry. Adds `is_canopy_kelp` flag
 (Giant Kelp, Feather Boa Kelp) and `is_no_blade_kelp` flag for downstream exclusion logic.
-One row per organism observation per transect.
+Extrapolates raw amount and stipes counts to full 30m transect equivalents to correct
+for subsampling: `extrapolated = (raw / distance) * 30`. Applies universally — transects
+run to full 30m return a multiplier of 1 with no change. Retains raw values and distance
+for reference. One row per organism observation per transect.
 
 Note: Invasive species (Sargassum muticum, Sargassum horneri, Undaria, Caulerpa) are not
 tracked as classcodes in the raw algae tables and do not appear in this pipeline. Invasive
@@ -60,8 +63,9 @@ presence data was unavailable in this data delivery.
 
 **Intermediate** — `int_algae_abundance_normalized_2025`
 Normalizes abundance across species using the appropriate proxy per species type:
-canopy kelp (Giant Kelp, Feather Boa Kelp) uses SUM(stipes) as abundance proxy;
-all other species use SUM(amount). No Blade Kelp excluded — no taxonomic resolution.
+canopy kelp (Giant Kelp, Feather Boa Kelp) uses SUM(stipes_extrapolated) as abundance proxy;
+all other species use SUM(amount_extrapolated). Extrapolation to full 30m transect equivalent
+is applied in the staging layer. No Blade Kelp excluded — no taxonomic resolution.
 Output: one normalized_amount per site per species, zero rows excluded.
 
 **Intermediate** — `int_survey_sites_west_coast`

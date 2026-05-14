@@ -2,6 +2,10 @@
 -- Staging model: unions CA, OR, and WA raw algae tables
 -- Filters to 2025 survey year only
 -- Derives species from classcode, collapsing Southern Sea Palm size bins
+-- Extrapolates amount and stipes to full 30m transect equivalent
+--   extrapolated = (raw / distance) * 30
+--   applies universally -- if distance = 30 multiplier is 1, no change
+--   if distance < 30 subsampling occurred and count is scaled accordingly
 -- Adds classification flags for downstream exclusion logic
 -- Note: invasive species (Sargassum muticum, Sargassum horneri, Undaria, Caulerpa)
 -- are not present in raw algae classcodes and are excluded from this pipeline.
@@ -12,8 +16,13 @@ with ca as (
         Site                                            as site_name,
         Year                                            as year,
         Classcode                                       as classcode,
-        Amount                                          as amount,
-        Stipes                                          as stipes,
+        Amount                                          as amount_raw,
+        Stipes                                          as stipes_raw,
+        Distance                                        as distance,
+        SAFE_CAST(Amount AS FLOAT64)
+            / SAFE_CAST(Distance AS FLOAT64) * 30      as amount_extrapolated,
+        SAFE_CAST(Stipes AS FLOAT64)
+            / SAFE_CAST(Distance AS FLOAT64) * 30      as stipes_extrapolated,
         Latitude                                        as latitude,
         Longitude                                       as longitude,
         'CA'                                            as state
@@ -26,8 +35,13 @@ or_ as (
         Site                                            as site_name,
         Year                                            as year,
         Classcode                                       as classcode,
-        Amount                                          as amount,
-        Stipes                                          as stipes,
+        Amount                                          as amount_raw,
+        Stipes                                          as stipes_raw,
+        Distance                                        as distance,
+        SAFE_CAST(Amount AS FLOAT64)
+            / SAFE_CAST(Distance AS FLOAT64) * 30      as amount_extrapolated,
+        SAFE_CAST(Stipes AS FLOAT64)
+            / SAFE_CAST(Distance AS FLOAT64) * 30      as stipes_extrapolated,
         Latitude                                        as latitude,
         Longitude                                       as longitude,
         'OR'                                            as state
@@ -40,8 +54,13 @@ wa as (
         Site                                            as site_name,
         Year                                            as year,
         Classcode                                       as classcode,
-        Amount                                          as amount,
-        Stipes                                          as stipes,
+        Amount                                          as amount_raw,
+        Stipes                                          as stipes_raw,
+        Distance                                        as distance,
+        SAFE_CAST(Amount AS FLOAT64)
+            / SAFE_CAST(Distance AS FLOAT64) * 30      as amount_extrapolated,
+        SAFE_CAST(Stipes AS FLOAT64)
+            / SAFE_CAST(Distance AS FLOAT64) * 30      as stipes_extrapolated,
         Latitude                                        as latitude,
         Longitude                                       as longitude,
         'WA'                                            as state
@@ -71,8 +90,11 @@ with_species as (
             when classcode = 'Southern Sea Palm (>30)' then 'Southern Sea Palm'
             else classcode
         end                                             as species,
-        amount,
-        stipes,
+        amount_raw,
+        stipes_raw,
+        distance,
+        amount_extrapolated,
+        stipes_extrapolated,
         latitude,
         longitude,
         state
@@ -84,13 +106,16 @@ select
     year,
     classcode,
     species,
-    amount,
-    stipes,
+    amount_raw,
+    stipes_raw,
+    distance,
+    amount_extrapolated,
+    stipes_extrapolated,
     latitude,
     longitude,
     state,
 
-    -- Canopy kelp: abundance proxy uses stipes in normalization layer
+    -- Canopy kelp: abundance proxy uses stipes_extrapolated in normalization layer
     case when species in ('Giant Kelp', 'Feather Boa Kelp')
         then true else false end                        as is_canopy_kelp,
 

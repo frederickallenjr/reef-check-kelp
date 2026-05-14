@@ -6,6 +6,7 @@
 --   extrapolated = (raw / distance) * 30
 --   applies universally -- if distance = 30 multiplier is 1, no change
 --   if distance < 30 subsampling occurred and count is scaled accordingly
+-- Raw amount, stipes, and distance retained for reference
 -- Adds classification flags for downstream exclusion logic
 -- Note: invasive species (Sargassum muticum, Sargassum horneri, Undaria, Caulerpa)
 -- are not present in raw algae classcodes and are excluded from this pipeline.

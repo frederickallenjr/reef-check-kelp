@@ -2,6 +2,10 @@
 -- Final Tableau-ready mart: one row per site, all 172 surveyed sites included
 -- Sites with no recorded indicator species: shannon_index = 0, species_richness = 0
 -- Shannon Index H' and species richness from Shannon layer
+-- Pielou's J' (evenness) = shannon_index / LN(species_richness)
+--   ranges 0-1 regardless of richness, used for cross-site color encoding
+--   0 for sites with species_richness of 0 or 1 -- zero is ecologically meaningful,
+--   not missing data. A site with no recorded algae has no evenness by definition.
 -- CA region assigned by latitude using Reef Check 3-region statewide framework:
 --   Northern: Oregon Border to Golden Gate (~37.83N)
 --   Central: Golden Gate to Point Conception (~34.45N)
@@ -37,6 +41,13 @@ select
     si.longitude,
     coalesce(sh.shannon_index, 0)                       as shannon_index,
     coalesce(sh.species_richness, 0)                    as species_richness,
+    case
+        when coalesce(sh.species_richness, 0) <= 1
+        then 0
+        else round(
+            coalesce(sh.shannon_index, 0) / LN(coalesce(sh.species_richness, 0)),
+        4)
+    end                                                 as pielou_evenness,
     case
         when si.state = 'CA' and si.latitude >= 37.83 then 'Northern'
         when si.state = 'CA' and si.latitude >= 34.45 then 'Central'

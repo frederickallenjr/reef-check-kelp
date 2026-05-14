@@ -1,13 +1,12 @@
-# Reef Check Kelp — dbt Pipeline
+# Reef Check Kelp Forest Program — dbt Pipeline
 
 ## Overview
-ELT pipeline for Reef Check California (RCCA) kelp transect data.
-Transforms raw survey data into site-level Giant Kelp population metrics
-for visualization in Tableau.
+ELT pipeline for Reef Check Kelp Forest Monitoring transect data.
+Transforms raw survey data into marts ready for visualization.
 
 **Stack**: BigQuery · dbt Core · Git
 
-**Data source**: Reef Check California data request, February 2026.
+**Data source**: Reef Check Kelp Forest Program data request, February 2026.
 Data spans 2006–2025. See [data.reefcheck.org](https://data.reefcheck.org)
 for terms of use.
 
@@ -169,7 +168,7 @@ Washington sites return NULL for ca_region.
 
 
 ## Data Provenance
-Raw data received as CSV via Reef Check California data request.
+Raw data received as CSV via Reef Check Kelp Forest Monitoring data request.
 Original collection method: volunteer diver transects recorded on
 waterproof datasheets, photographed, and hand-entered into Google Sheets.
 
@@ -220,7 +219,7 @@ will serve as a shared site reference across all pipelines.
 
 ### Regional expansion
 Current data covers existing sites in California, Oregon, and Washington. 
-Expanding the pipeline to include future sites would require only new 
+Expanding the pipeline to include sites in Baja California or future sites in CA, WA, or OR would require only new 
 source tables and staging models — the intermediate and mart layer logic is 
 transferable with minimal modification.
 

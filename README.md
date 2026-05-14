@@ -82,8 +82,11 @@ Also calculates species_richness as count of distinct species per site.
 Joins Shannon Index and species richness to site coordinates from
 `int_survey_sites_west_coast`. All 172 surveyed sites included. Sites with no recorded
 indicator species return shannon_index = 0 and species_richness = 0 via COALESCE.
-Adds `ca_region` for California sites using the Reef Check 3-region statewide framework.
-One row per site. Primary data source for West Coast Biodiversity Tableau dashboard.
+Adds Pielou's J' evenness index (shannon_index / LN(species_richness)), which normalizes
+Shannon by the theoretical maximum for a given richness level, producing a 0-1 scale
+suitable for cross-site color encoding. J' is NULL for sites with species_richness of
+0 or 1. Adds `ca_region` for California sites using the Reef Check 3-region statewide
+framework. One row per site. Primary data source for West Coast Biodiversity Tableau dashboard.
 
 ### Giant Kelp — California
 

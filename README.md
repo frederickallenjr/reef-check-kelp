@@ -85,7 +85,11 @@ indicator species return shannon_index = 0 and species_richness = 0 via COALESCE
 Adds Pielou's J' evenness index (shannon_index / LN(species_richness)), which normalizes
 Shannon by the theoretical maximum for a given richness level, producing a 0-1 scale
 suitable for cross-site color encoding. J' is NULL for sites with species_richness of
-0 or 1. Adds `ca_region` for California sites using the Reef Check 3-region statewide
+0 or 1. Adds Hill number ¹D (EXP(shannon_index)), the effective number of species equivalent
+to the observed Shannon diversity. Directly interpretable as a species count,
+richness-sensitive, and preferred ranking metric over J' for naturally stratified
+communities such as kelp forests where dominant canopy species are expected to
+outnumber understory species by design. Adds `ca_region` for California sites using the Reef Check 3-region statewide
 framework. One row per site. Primary data source for West Coast Biodiversity Tableau dashboard.
 
 ### Giant Kelp — California

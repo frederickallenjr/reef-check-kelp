@@ -6,6 +6,10 @@
 --   ranges 0-1 regardless of richness, used for cross-site color encoding
 --   0 for sites with species_richness of 0 or 1 -- zero is ecologically meaningful,
 --   not missing data. A site with no recorded algae has no evenness by definition.
+-- Hill number 1D = EXP(shannon_index)
+--   effective number of species equivalent to observed diversity
+--   directly interpretable as species count, richness-sensitive
+--   preferred ranking metric over J' for naturally stratified communities
 -- CA region assigned by latitude using Reef Check 3-region statewide framework:
 --   Northern: Oregon Border to Golden Gate (~37.83N)
 --   Central: Golden Gate to Point Conception (~34.45N)
@@ -48,6 +52,7 @@ select
             coalesce(sh.shannon_index, 0) / LN(coalesce(sh.species_richness, 0)),
         4)
     end                                                 as pielou_evenness,
+    round(EXP(coalesce(sh.shannon_index, 0)), 4)        as hill_1d,
     case
         when si.state = 'CA' and si.latitude >= 37.83 then 'Northern'
         when si.state = 'CA' and si.latitude >= 34.45 then 'Central'
